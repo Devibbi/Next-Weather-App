@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
+import { FaLocationArrow } from 'react-icons/fa';
 
 const GEO_API = 'https://geocoding-api.open-meteo.com/v1/search?name=';
 
@@ -59,21 +60,32 @@ const SearchBar = ({ onSearch }) => {
     setShowSuggestions(false);
   };
 
-  const handleGeo = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        const { latitude, longitude } = pos.coords;
-        // Reverse geocode to city name
-        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}`);
-        const data = await res.json();
-        if (data && data.name) {
-          setQuery(data.name);
-          handleSearch(null, data.name);
-        }
-      });
-    } else {
-      alert('Geolocation not supported');
+  const handleGeo = async () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
     }
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
+        // Reverse geocode to city name (use a robust API and handle errors)
+        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${latitude}&longitude=${longitude}`);
+        if (!res.ok) throw new Error('Failed to fetch location');
+        const data = await res.json();
+        // Use city name from response or fallback to coords
+        if (data && data.results && data.results[0] && data.results[0].name) {
+          setQuery(data.results[0].name);
+          onSearch(data.results[0].name);
+        } else {
+          setQuery(`${latitude.toFixed(2)},${longitude.toFixed(2)}`);
+          onSearch(`${latitude},${longitude}`);
+        }
+      } catch (err) {
+        alert('Could not fetch your location. Please try again.');
+      }
+    }, (err) => {
+      alert('Unable to get your location. Please allow location access.');
+    });
   };
 
   const toggleFavorite = () => {
@@ -96,8 +108,10 @@ const SearchBar = ({ onSearch }) => {
             onChange={handleInputChange}
             onFocus={() => setShowSuggestions(suggestions.length > 0)}
           />
+          <GeoButton type="button" onClick={handleGeo} title="Use my location" aria-label="Detect my location">
+            <FaLocationArrow size={20} style={{color:'#2563eb',verticalAlign:'middle'}} />
+          </GeoButton>
           <button type="submit">Search</button>
-          <GeoButton type="button" onClick={handleGeo} title="Use my location">📍</GeoButton>
           <FavButton type="button" onClick={toggleFavorite} title="Add/Remove Favorite">
             {favorites.includes(query) ? '★' : '☆'}
           </FavButton>
@@ -121,49 +135,68 @@ const SearchBar = ({ onSearch }) => {
 };
 
 export default SearchBar;
+
 const Container = styled.div`
-.center1 {
-width:75%;
-margin:0 auto;
-}
-
-form{
-  display: flex;
-  margin-bottom: 20px;
-  background:white;
-  width:100%;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-input{
-  padding: 10px;
-  font-size: 1rem;
-  border: 2px solid #ccc;
-}
-
-button{
-  padding: 10px;
-  border: none;
-  background: #0070f3;
-  color: white;
-  border-radius: 5px;
-  margin-left: 10px;
-  cursor: pointer;
-  font-size: 1rem;
-}
+  .center1 {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  form {
+    display: flex;
+    margin-bottom: 18px;
+    background: rgba(255,255,255,0.22);
+    box-shadow: 0 2px 16px 0 rgba(31,38,135,0.08);
+    backdrop-filter: blur(6px);
+    border-radius: 14px;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    align-items: center;
+    border: 1.5px solid rgba(255,255,255,0.12);
+  }
+  input {
+    padding: 0.7rem 1rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    flex: 1;
+    margin-right: 0.7rem;
+    background: rgba(255,255,255,0.48);
+    color: var(--primary-text);
+    box-shadow: 0 1px 4px rgba(31,38,135,0.04);
+    transition: background 0.2s;
+  }
+  input:focus {
+    background: rgba(255,255,255,0.8);
+  }
+  button {
+    padding: 0.7rem 1.2rem;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    margin-left: 7px;
+    cursor: pointer;
+    font-size: 1.08rem;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(31,38,135,0.04);
+    transition: background 0.2s;
+  }
+  button:hover {
+    background: #0ea5e9;
+  }
 `;
 
 const GeoButton = styled.button`
-  background: #38bdf8;
-  margin-left: 6px;
-  font-size: 1.2rem;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  background: none;
+  border: none;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  color: #2563eb;
   display: flex;
   align-items: center;
-  justify-content: center;
+  &:hover { color: #1e40af; }
 `;
 
 const FavButton = styled.button`
@@ -177,23 +210,27 @@ const FavButton = styled.button`
   align-items: center;
   justify-content: center;
   color: #f59e42;
+  box-shadow: 0 1px 4px rgba(31,38,135,0.10);
+  border: none;
 `;
 
 const Suggestions = styled.ul`
   position: absolute;
-  background: #fff;
+  background: rgba(255,255,255,0.97);
   color: #222;
-  width: 300px;
-  max-width: 90vw;
+  width: 340px;
+  max-width: 94vw;
   margin-top: 2px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(31,38,135,0.13);
   list-style: none;
   padding: 0;
   z-index: 100;
   li {
-    padding: 10px 18px;
+    padding: 12px 18px;
     cursor: pointer;
+    border-radius: 7px;
+    font-size: 1.07rem;
     &:hover {
       background: #e2e8f0;
     }
@@ -201,9 +238,9 @@ const Suggestions = styled.ul`
 `;
 
 const QuickAccess = styled.div`
-  margin-top: 8px;
+  margin-top: 10px;
   text-align: left;
-  font-size: 0.97rem;
+  font-size: 1.01rem;
   div { margin-bottom: 4px; }
 `;
 const QuickBtn = styled.button`
@@ -215,5 +252,7 @@ const QuickBtn = styled.button`
   padding: 0.2em 0.9em;
   font-size: 1em;
   cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(31,38,135,0.07);
   &:hover { background: #bae6fd; }
 `;

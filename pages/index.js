@@ -2,10 +2,15 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { getCurrentWeather, getWeatherForecast, getAirQuality, getUVIndex } from '../components/api';
 import SearchBar from '../components/SearchBar';
 import WeatherCard from '../components/WeatherCard';
-import WeatherChart from '../components/WeatherChart';
+import HourlyForecast from '../components/HourlyForecast';
+import ForecastSection from '../components/ForecastSection';
+import PromoBanner from '../components/PromoBanner';
+import NewsLeft from '../components/NewsLeft';
+import NewsRight from '../components/NewsRight';
+import FooterFull from '../components/FooterFull';
 const WeatherMap = React.lazy(() => import('../components/WeatherMap'));
 import CustomHead from './_head';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 export default function Home() {
   const [location, setLocation] = useState('New York');
@@ -56,32 +61,123 @@ export default function Home() {
     <>
       <CustomHead title="Weather App | Modern, Robust Weather Forecast" description="Modern, robust weather app with live radar, AQI, UV, hourly & 7-day forecast, and more." />
       <Container>
-        <div className="App">
-          <h1>Weather App</h1>
+        <div className="App glass-bg">
+          <h1 className="main-title">Weather App</h1>
           <SearchBar onSearch={setLocation} />
-          {currentWeather ? <WeatherCard weather={currentWeather} aqi={aqi} uv={uv} /> : <p>Loading weather...</p>}
-          {forecast ? <WeatherChart forecast={forecast} /> : <p>Loading forecast...</p>}
-          {currentWeather && currentWeather.coord && (
-            <Suspense fallback={<div>Loading map…</div>}>
-              <WeatherMap lat={currentWeather.coord.lat} lon={currentWeather.coord.lon} />
-            </Suspense>
-          )}
+          <PromoBanner />
+          <MainLayout>
+            <NewsAreaLeft>
+              <NewsLeft />
+            </NewsAreaLeft>
+            <MainContentArea>
+              <div className="weather-content">
+                {currentWeather ? <WeatherCard weather={currentWeather} aqi={aqi} uv={uv} /> : <p>Loading weather...</p>}
+              </div>
+              {forecast ? <ForecastSection forecast={forecast} /> : <p>Loading forecast...</p>}
+            </MainContentArea>
+            <NewsAreaRight>
+              <NewsRight />
+            </NewsAreaRight>
+          </MainLayout>
         </div>
+        <FooterFull />
       </Container>
     </>
   );
 }
 
 const Container = styled.div`
-  min-height: 800px;
-  padding: 40px;
+  min-height: 100vh;
+  padding: 0;
   text-align: center;
   background-image: url('https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?cs=srgb&dl=pexels-pixabay-209831.jpg&fm=jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  img {
-    width: auto;
-    height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: ${({ theme }) => theme.text};
+  .glass-bg {
+    background: ${({ theme }) => theme.mode === 'dark' ? 'rgba(35,41,70,0.85)' : 'rgba(255,255,255,0.17)'};
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    margin-top: 2.5rem;
+    width: 90vw;
+    max-width: 1100px;
+  }
+  .main-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 1.5rem;
+    color: ${({ theme }) => theme.text};
+    text-shadow: ${({ theme }) => theme.mode === 'dark' ? '0 2px 24px rgba(0,0,0,0.38)' : '0 2px 24px rgba(0,0,0,0.18)'};
+  }
+  .weather-content {
+    display: flex;
+    gap: 2.5rem;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+`;
+
+const MainLayout = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0 auto;
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+  }
+`;
+const MainContentArea = styled.div`
+  flex: 1 1 600px;
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${({ theme }) => theme.text};
+`;
+const NewsAreaLeft = styled.div`
+  flex: 0 0 320px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: ${({ theme }) => theme.text};
+  @media (max-width: 900px) {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+`;
+const NewsAreaRight = styled.div`
+  flex: 0 0 320px;
+  max-width: 340px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: ${({ theme }) => theme.text};
+  @media (max-width: 900px) {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    align-items: center;
   }
 `;
