@@ -59,10 +59,13 @@ export default function Home() {
 
   return (
     <>
-      <CustomHead title="Weather App | Modern, Robust Weather Forecast" description="Modern, robust weather app with live radar, AQI, UV, hourly & 7-day forecast, and more." />
+      <CustomHead title="Weather Forecast" description="Modern, robust weather app with live radar, AQI, UV, hourly & 7-day forecast, and more." />
       <Container>
         <div className="App glass-bg">
-          <h1 className="main-title">Weather App</h1>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <img src="/sun.png" alt="Weather Logo" style={{ height: 48, width: 48, marginRight: 16 }} />
+            <h1 className="main-title" style={{ margin: 0 }}>Weather App</h1>
+          </div>
           <SearchBar onSearch={setLocation} />
           <PromoBanner />
           <MainLayout>
@@ -102,6 +105,8 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   color: ${({ theme }) => theme.text};
+  overflow-x: auto;
+  width: 100vw;
   .glass-bg {
     background: ${({ theme }) => theme.mode === 'dark' ? 'rgba(35,41,70,0.85)' : 'rgba(255,255,255,0.17)'};
     box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
@@ -111,7 +116,8 @@ const Container = styled.div`
     padding: 2.5rem 2.5rem 2rem 2.5rem;
     margin-top: 2.5rem;
     width: 90vw;
-    max-width: 1100px;
+    max-width: 100vw;
+    overflow-x: visible;
   }
   .main-title {
     font-size: 2.8rem;
@@ -129,25 +135,131 @@ const Container = styled.div`
     margin-top: 2.5rem;
     flex-wrap: wrap;
   }
+  @media (max-width: 1400px) {
+    .glass-bg {
+      max-width: 100vw;
+      width: 100vw;
+      padding: 2rem 1.2rem 2rem 1.2rem;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 2.3rem;
+    }
+  }
+  @media (max-width: 1200px) {
+    .glass-bg {
+      max-width: 100vw;
+      width: 100vw;
+      padding: 1.5rem 0.7rem 1.5rem 0.7rem;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 2rem;
+    }
+    .weather-content {
+      gap: 1.7rem;
+    }
+  }
+  @media (max-width: 900px) {
+    .glass-bg {
+      padding: 1.2rem 0.3rem 1.2rem 0.3rem;
+      max-width: 100vw;
+      width: 100vw;
+      border-radius: 0;
+      margin-top: 0.7rem;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .weather-content {
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  @media (max-width: 700px) {
+    .glass-bg {
+      padding: 0.8rem 0.1rem 0.8rem 0.1rem;
+      max-width: 100vw;
+      width: 100vw;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 1.3rem;
+    }
+    .weather-content {
+      gap: 0.8rem;
+    }
+  }
+  @media (max-width: 540px) {
+    .glass-bg {
+      padding: 0.5rem 0.05rem 0.5rem 0.05rem;
+      max-width: 100vw;
+      width: 100vw;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 1.08rem;
+    }
+  }
+  @media (max-width: 400px) {
+    .glass-bg {
+      padding: 0.2rem 0 0.2rem 0;
+      max-width: 100vw;
+      width: 100vw;
+      overflow-x: visible;
+    }
+    .main-title {
+      font-size: 0.92rem;
+    }
+  }
 `;
 
 const MainLayout = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 2.5rem;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
+  width: 100vw;
+  max-width: 1200px;
   margin: 0 auto;
-  @media (max-width: 900px) {
-    flex-direction: column;
+  gap: 2.5rem;
+  box-sizing: border-box;
+  overflow-x: visible;
+  padding-left: 24px;
+  padding-right: 24px;
+  @media (max-width: 1400px) {
+    max-width: 98vw;
     gap: 1.5rem;
-    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  @media (max-width: 1200px) {
+    max-width: 98vw;
+    gap: 1.2rem;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  @media (max-width: 1100px) {
+    gap: 0.7rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.2rem;
+    max-width: 100vw;
+    padding: 0;
   }
 `;
 const MainContentArea = styled.div`
   flex: 1 1 600px;
-  max-width: 700px;
+  max-width: 100vw;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -156,7 +268,7 @@ const MainContentArea = styled.div`
 `;
 const NewsAreaLeft = styled.div`
   flex: 0 0 320px;
-  max-width: 340px;
+  max-width: 100vw;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -171,7 +283,7 @@ const NewsAreaLeft = styled.div`
 `;
 const NewsAreaRight = styled.div`
   flex: 0 0 320px;
-  max-width: 340px;
+  max-width: 100vw;
   width: 100%;
   display: flex;
   flex-direction: column;

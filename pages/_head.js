@@ -16,7 +16,7 @@ export default function CustomHead({ title = 'Weather App', description = 'Moder
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content="/weather-og.png" />
       <link rel="manifest" href="/manifest.json" />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/cloudy.png" />
     </Head>
   );
 }

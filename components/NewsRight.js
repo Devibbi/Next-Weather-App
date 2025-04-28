@@ -36,6 +36,16 @@ const NewsBanner = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  box-sizing: border-box;
+  padding-right: 0;
+  align-items: stretch;
+  @media (min-width: 1200px) {
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+    align-items: stretch;
+  }
   .news-banner-item {
     display: flex;
     align-items: center;
@@ -44,12 +54,59 @@ const NewsBanner = styled.div`
     border-radius: 16px;
     padding: 1.1rem 1rem;
     gap: 1.2rem;
+    min-width: 0;
+    min-height: 130px;
+    width: 100%;
+    max-width: 100%;
+    margin-right: 0;
+    box-sizing: border-box;
+    height: 140px;
+    @media (min-width: 1200px) {
+      height: 140px;
+      min-height: 140px;
+    }
+    @media (max-width: 1200px) {
+      min-height: 120px;
+      font-size: 0.98rem;
+      height: 120px;
+    }
+    @media (max-width: 1024px) {
+      min-height: 120px;
+      height: 120px;
+      font-size: 0.93rem;
+    }
+    @media (max-width: 900px) {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      width: 100%;
+      min-width: 0;
+      min-height: 100px;
+      font-size: 0.92rem;
+      height: auto;
+    }
+    @media (max-width: 700px) {
+      min-height: 90px;
+      font-size: 0.89rem;
+      img { width: 44px; height: 44px; }
+    }
+    @media (max-width: 540px) {
+      min-height: 70px;
+      font-size: 0.85rem;
+      img { width: 36px; height: 36px; }
+    }
+    @media (max-width: 400px) {
+      min-height: 54px;
+      font-size: 0.78rem;
+      img { width: 28px; height: 28px; }
+    }
     img {
       width: 56px;
       height: 56px;
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 1px 8px #2563eb22;
+      flex-shrink: 0;
     }
     h4 {
       margin: 0 0 0.2rem 0;
@@ -62,6 +119,12 @@ const NewsBanner = styled.div`
       color: ${({ $isDark }) => $isDark ? '#e0e7ef' : '#222'};
       font-size: 0.97rem;
     }
+  }
+  @media (max-width: 900px) {
+    gap: 0.8rem;
+    max-width: 100vw;
+    padding-right: 0;
+    align-items: stretch;
   }
 `;
 

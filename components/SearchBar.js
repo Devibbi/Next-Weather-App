@@ -153,6 +153,9 @@ const Container = styled.div`
     padding: 0.7rem 1rem;
     align-items: center;
     border: 1.5px solid rgba(255,255,255,0.12);
+    min-width: 0;
+    max-width: 100vw;
+    overflow-x: auto;
   }
   input {
     padding: 0.7rem 1rem;
@@ -161,14 +164,10 @@ const Container = styled.div`
     border-radius: 8px;
     outline: none;
     flex: 1;
+    min-width: 0;
     margin-right: 0.7rem;
-    background: rgba(255,255,255,0.48);
-    color: var(--primary-text);
-    box-shadow: 0 1px 4px rgba(31,38,135,0.04);
-    transition: background 0.2s;
-  }
-  input:focus {
-    background: rgba(255,255,255,0.8);
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   button {
     padding: 0.7rem 1.2rem;
@@ -182,9 +181,53 @@ const Container = styled.div`
     font-weight: 600;
     box-shadow: 0 1px 4px rgba(31,38,135,0.04);
     transition: background 0.2s;
+    min-width: 38px;
+    max-width: 100vw;
   }
-  button:hover {
-    background: #0ea5e9;
+  @media (max-width: 900px) {
+    form {
+      flex-direction: row;
+      width: 100%;
+      max-width: 100vw;
+      padding: 0.5rem 0.4rem;
+      min-width: 0;
+    }
+    input {
+      font-size: 1rem;
+      padding: 0.5rem 0.7rem;
+      margin-right: 0.4rem;
+    }
+    button {
+      padding: 0.5rem 0.7rem;
+      font-size: 1rem;
+      margin-left: 5px;
+    }
+  }
+  @media (max-width: 540px) {
+    form {
+      padding: 0.3rem 0.1rem;
+    }
+    input {
+      font-size: 0.95rem;
+      padding: 0.3rem 0.5rem;
+    }
+    button {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.95rem;
+    }
+  }
+  @media (max-width: 400px) {
+    form {
+      padding: 0.15rem 0;
+    }
+    input {
+      font-size: 0.89rem;
+      padding: 0.2rem 0.3rem;
+    }
+    button {
+      padding: 0.2rem 0.3rem;
+      font-size: 0.89rem;
+    }
   }
 `;
 
