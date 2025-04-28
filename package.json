@@ -12,6 +12,7 @@
     "axios": "latest",
     "chart.js": "latest",
     "next": "latest",
+    "next-auth": "^4.24.11",
     "react": "latest",
     "react-chartjs-2": "latest",
     "react-dom": "latest",

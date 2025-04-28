@@ -1,23 +1,51 @@
 import React from "react";
 import styled from "styled-components";
+import { useRouter } from 'next/router';
 
-const PromoBanner = () => (
-  <Banner>
-    <div className="promo-content">
-      <div className="promo-left">
-        <h2>Want Premium Weather Services?</h2>
-        <p>
-          <b>Login</b> to enjoy <b>live climate updates</b>, <b>minute-casts</b>, notifications, and more.<br/>
-          Or <b>download our app</b> for the best mobile experience!
-        </p>
+const PromoBanner = () => {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const loggedIn = localStorage.getItem('weatherAppLoggedIn');
+      setIsLoggedIn(!!loggedIn);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('weatherAppLoggedIn', '1');
+    }
+    setIsLoggedIn(true);
+    router.push('/login');
+  };
+
+  // Always show the banner
+  return (
+    <Banner>
+      <div className="promo-content">
+        <div className="promo-left">
+          <h2>Want Premium Weather Services?</h2>
+          <p>
+            {!isLoggedIn && (
+              <>
+                <b>Login</b> to enjoy <b>live climate updates</b>, <b>minute-casts</b>, notifications, and more.<br/>
+              </>
+            )}
+            Or <b>download our app</b> for the best mobile experience!
+          </p>
+        </div>
+        <div className="promo-actions">
+          {!isLoggedIn && (
+            <Button className="login" onClick={handleLogin}>Login</Button>
+          )}
+          <Button className="download">Download App</Button>
+        </div>
       </div>
-      <div className="promo-actions">
-        <Button className="login">Login</Button>
-        <Button className="download">Download App</Button>
-      </div>
-    </div>
-  </Banner>
-);
+    </Banner>
+  );
+};
 
 const Banner = styled.div`
   background: linear-gradient(90deg, #38bdf8bb 0%, #2563ebbb 100%);

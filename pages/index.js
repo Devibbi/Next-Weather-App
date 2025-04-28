@@ -88,12 +88,15 @@ export default function Home() {
 
 const Container = styled.div`
   min-height: 100vh;
+  min-width: 100vw;
   padding: 0;
   text-align: center;
   background-image: url('https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?cs=srgb&dl=pexels-pixabay-209831.jpg&fm=jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
+  background-color: #bcd1e6;
   display: flex;
   flex-direction: column;
   align-items: center;

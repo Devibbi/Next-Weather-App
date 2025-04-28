@@ -43,11 +43,12 @@ function getMonthlyForecast(forecast) {
 
 function WeatherIcon({ desc }) {
   const d = desc.toLowerCase();
-  if (d.includes('rain')) return <FaCloudRain style={{color:'#38bdf8',verticalAlign:'middle'}} title="Rain"/>;
-  if (d.includes('sun') || d.includes('clear')) return <FaSun style={{color:'#fbbf24',verticalAlign:'middle'}} title="Sunny"/>;
-  if (d.includes('cloud')) return <FaCloud style={{color:'#a3a3a3',verticalAlign:'middle'}} title="Cloudy"/>;
-  if (d.includes('snow')) return <FaSnowflake style={{color:'#60a5fa',verticalAlign:'middle'}} title="Snow"/>;
-  if (d.includes('storm') || d.includes('thunder')) return <FaBolt style={{color:'#f87171',verticalAlign:'middle'}} title="Storm"/>;
+  const iconStyle = { color: undefined, verticalAlign: 'middle', fontSize: '1.7em', minWidth: '1.7em', minHeight: '1.7em', display: 'inline-block' };
+  if (d.includes('rain')) return <FaCloudRain style={{ ...iconStyle, color: '#38bdf8' }} title="Rain"/>;
+  if (d.includes('sun') || d.includes('clear')) return <FaSun style={{ ...iconStyle, color: '#fbbf24' }} title="Sunny"/>;
+  if (d.includes('cloud')) return <FaCloud style={{ ...iconStyle, color: '#a3a3a3' }} title="Cloudy"/>;
+  if (d.includes('snow')) return <FaSnowflake style={{ ...iconStyle, color: '#60a5fa' }} title="Snow"/>;
+  if (d.includes('storm') || d.includes('thunder')) return <FaBolt style={{ ...iconStyle, color: '#f87171' }} title="Storm"/>;
   return null;
 }
 
@@ -74,13 +75,15 @@ const ForecastSection = ({ forecast }) => {
             </tr>
           </thead>
           <tbody>
-            {daily.map((item, i) => (
+            {daily.map((d, i) => (
               <tr key={i}>
-                <td>{item.date}</td>
-                <td>{item.avgTemp}</td>
-                <td><WeatherIcon desc={item.weather} /> {item.weather}</td>
-                <td>{item.humidity}%</td>
-                <td>{item.wind}</td>
+                <td>{d.date}</td>
+                <td>{d.avgTemp}</td>
+                <td style={{display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5em'}}>
+                  <WeatherIcon desc={d.weather} /> <span style={{textTransform:'capitalize'}}>{d.weather}</span>
+                </td>
+                <td>{d.humidity}%</td>
+                <td>{d.wind}</td>
               </tr>
             ))}
           </tbody>

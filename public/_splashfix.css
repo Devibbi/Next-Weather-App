@@ -1,0 +1,12 @@
+/* Persistent background for instant splash: prevents unstyled HTML flicker before animation loads */
+html, body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: linear-gradient(180deg, #bcd1e6 60%, #7e9bbd 100%) !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  /* Fix: allow overflow-y for splash exit animation */
+  overflow-y: visible !important;
+}

@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaFacebookF, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const FooterFull = () => (
   <FooterContainer>
     <FooterLinks>
-      <a href="#">Terms of Use</a> |
-      <a href="#">Privacy Policy</a> |
-      <a href="#">Accessibility Statement</a> |
-      <a href="#">Data Vendors</a>
+      <a href="/terms">Terms of Use</a> |
+      <a href="/privacy">Privacy Policy</a> |
+      <a href="/accessibility">Accessibility Statement</a> |
+      <a href="/datavendors">Data Vendors</a>
     </FooterLinks>
     <FooterSocial>
-      <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-      <a href="#" aria-label="Twitter"><FaTwitter /></a>
-      <a href="#" aria-label="Instagram"><FaInstagram /></a>
-      <a href="#" aria-label="YouTube"><FaYoutube /></a>
+      <a href="https://facebook.com/askibbi" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+      <a href="https://twitter.com/ibraheembhatti" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+      <a href="https://instagram.com/ibbi_125" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+      <a href="https://github.com/devibbi" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><FaGithub /></a>
     </FooterSocial>
     <FooterText>
       <span><strong>Data Rights:</strong> The Weather App uses the most accurate data sources and APIs for your location. All forecasts and data are provided for informational purposes only.</span>

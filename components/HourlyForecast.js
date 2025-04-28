@@ -11,11 +11,12 @@ function getPrecipitation(item) {
 
 function WeatherIcon({ desc }) {
   const d = desc.toLowerCase();
-  if (d.includes('rain')) return <FaCloudRain style={{color:'#38bdf8',verticalAlign:'middle'}} title="Rain"/>;
-  if (d.includes('sun') || d.includes('clear')) return <FaSun style={{color:'#fbbf24',verticalAlign:'middle'}} title="Sunny"/>;
-  if (d.includes('cloud')) return <FaCloud style={{color:'#a3a3a3',verticalAlign:'middle'}} title="Cloudy"/>;
-  if (d.includes('snow')) return <FaSnowflake style={{color:'#60a5fa',verticalAlign:'middle'}} title="Snow"/>;
-  if (d.includes('storm') || d.includes('thunder')) return <FaBolt style={{color:'#f87171',verticalAlign:'middle'}} title="Storm"/>;
+  const iconStyle = { color: undefined, verticalAlign: 'middle', fontSize: '1.7em', minWidth: '1.7em', minHeight: '1.7em', display: 'inline-block' };
+  if (d.includes('rain')) return <FaCloudRain style={{ ...iconStyle, color: '#38bdf8' }} title="Rain"/>;
+  if (d.includes('sun') || d.includes('clear')) return <FaSun style={{ ...iconStyle, color: '#fbbf24' }} title="Sunny"/>;
+  if (d.includes('cloud')) return <FaCloud style={{ ...iconStyle, color: '#a3a3a3' }} title="Cloudy"/>;
+  if (d.includes('snow')) return <FaSnowflake style={{ ...iconStyle, color: '#60a5fa' }} title="Snow"/>;
+  if (d.includes('storm') || d.includes('thunder')) return <FaBolt style={{ ...iconStyle, color: '#f87171' }} title="Storm"/>;
   return null;
 }
 
@@ -41,12 +42,16 @@ const HourlyForecast = ({ forecast }) => {
         <tbody>
           {next12.map((item, i) => {
             const dt = new Date(item.dt * 1000);
+            // Capitalize weather description and keep icon and text together
+            const desc = item.weather[0].description.replace(/\b\w/g, c => c.toUpperCase());
             return (
               <tr key={i}>
                 <td>{dt.getHours()}:00</td>
                 <td>{item.main.temp.toFixed(1)}</td>
                 <td>{item.main.feels_like.toFixed(1)}</td>
-                <td><WeatherIcon desc={item.weather[0].description} /> {item.weather[0].description}</td>
+                <td style={{display:'flex',alignItems:'center',justifyContent:'center',gap:'0.4em'}}>
+                  <WeatherIcon desc={desc} /> <span>{desc}</span>
+                </td>
                 <td>{getPrecipitation(item)}</td>
                 <td>{item.main.humidity}%</td>
                 <td>{item.wind.speed} m/s</td>
